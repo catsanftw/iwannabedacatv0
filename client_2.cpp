@@ -69,16 +69,13 @@ public:
 
             // Apply friction
             velocity = velocity * (1.0f - friction);
-
             force = Vector2(0, 0); // Reset force after applying
         }
     }
 };
 
-// Collision detection between two bodies (SAT)
+// Simplified AABB collision detection
 bool checkCollision(const RigidBody& a, const RigidBody& b) {
-    // Compute the collision detection here (SAT implementation)
-    // For simplicity, we're using AABB here; replace with SAT for advanced collisions
     return (a.position.x < b.position.x + b.size.x &&
             a.position.x + a.size.x > b.position.x &&
             a.position.y < b.position.y + b.size.y &&
@@ -106,13 +103,13 @@ public:
             for (size_t j = i + 1; j < bodies.size(); ++j) {
                 if (checkCollision(bodies[i], bodies[j])) {
                     std::cout << "Collision detected between body " << i << " and body " << j << std::endl;
+                    // Consider adding collision response here
                 }
             }
         }
     }
 };
 
-// Initialize SDL and create a window
 SDL_Window* initSDL(int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
@@ -129,7 +126,6 @@ SDL_Window* initSDL(int width, int height) {
     return window;
 }
 
-// Main client code
 int main() {
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
@@ -149,7 +145,7 @@ int main() {
     }
 
     PhysicsEngine engine;
-    RigidBody player(100, 100, 1.0f, 50.0f, 50.0f); // Add size to RigidBody
+    RigidBody player(100, 100, 1.0f, 50.0f, 50.0f); // Player initialization with size
     engine.addBody(player);
 
     bool running = true;
